@@ -20,7 +20,7 @@ class UnpromptedDialog(MycroftSkill):
         # Calculate the chance of speaking based on the stored frequency number
         if random.randint(1, 10) <= self.settings['frequency']:
             # Speak a random dialog
-            response = self.speak_dialog(random.choice(['unprompted.generic', 'unpromted.didyouknow']))
+            response = self.speak_dialog(random.choice(['unprompted.generic', 'unpromted.didyouknow', 'unpromted.affirmation', 'unprompted.relationship', 'unprompted.selfimprovement', 'unprompted.spiritual']))
             
     @intent_handler('change.frequency.intent')
     def handle_frequency_change(self, message):
