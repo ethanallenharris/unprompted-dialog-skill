@@ -18,15 +18,37 @@ class UnpromptedDialog(MycroftSkill):
             
     def __speak(self, message):
         # Calculate the chance of speaking based on the stored frequency number
-        if random.randint(0, 10) <= self.settings['frequency']:
+        if random.randint(1, 10) <= self.settings['frequency']:
             # Speak a random dialog
             response = self.speak_dialog(random.choice(['unprompted.generic', 'unpromted.didyouknow']))
             
     @intent_handler('change.frequency.intent')
     def handle_frequency_change(self, message):
-        self.speak_dialog('unprompted.generic')
-
-
+        # Get user desired change for frequency
+        frequency_change = message.data.get('frequency')
+        
+        if 'more' in frequency_change:
+            # Checks frequency variable is in range
+            if self.settings['frequency'] != 10:
+                self.settings['frequency'] += 1
+                self.speak_dialog('frequency.change', data={"frequency":"more"})
+                
+        elif 'less' in frequency_change:
+            # Checks frequency variable is in range
+            if self.settings['frequency'] != 0:
+                self.settings['frequency'] -= 1
+                self.speak_dialog('frequency.change', data={"frequency":"less"})
+                
+    
+    
+    @intent_handler('stop.intent')
+    def handle_frequency_stop(self, message):
+        # If user asks mycroft to stop talking unprompted, set to 0
+        self.settings['frequency'] = 0
+        # Says ' Okay I will no longer take the initiative to talk'
+        self.speak_dialog('stop')
+            
+        
 
 def create_skill():
     return UnpromptedDialog()
