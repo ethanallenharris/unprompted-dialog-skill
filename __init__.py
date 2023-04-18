@@ -1,26 +1,36 @@
 from mycroft import MycroftSkill, intent_handler
-from datetime import datetime, timedelta
+from datetime import *
 import random
 
 
 MINUTES = 60 #seconds
 
+FREQUENCY = 60 #minutes
+
+
 class UnpromptedDialog(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
         
-    def initialize(self):  
+    def initialize(self): 
+        self.settings['dialogOptions'] = ['unprompted.generic', 'unpromted.didyouknow', 'unpromted.affirmation', 'unprompted.relationship', 'unprompted.selfimprovement', 'unprompted.spiritual']
         # Creates repeating event to talk unpromted  
-        self.schedule_repeating_event(self.__speak, datetime.now(), 30 * MINUTES, name='unprompted')
+        self.schedule_repeating_event(self.__speak, datetime.now(), FREQUENCY * MINUTES, name='unprompted')
         # If frequency list doesn't exist yet instantiate it
         if 'frequency' not in self.settings:
             self.settings['frequency'] = 10
             
     def __speak(self, message):
+        current_time = datetime.now().time()
+        # If the current time is before 11 am or after 8 pm, do not activate/talk
+        if current_time < time(11) or current_time > time(20):
+            return  # Return and exit the function
+        
+        
         # Calculate the chance of speaking based on the stored frequency number
         if random.randint(1, 10) <= self.settings['frequency']:
             # Speak a random dialog
-            response = self.speak_dialog(random.choice(['unprompted.generic', 'unpromted.didyouknow', 'unpromted.affirmation', 'unprompted.relationship', 'unprompted.selfimprovement', 'unprompted.spiritual']))
+            response = self.speak_dialog(random.choice(self.settings['dialogOptions']))
             
     @intent_handler('change.frequency.intent')
     def handle_frequency_change(self, message):
