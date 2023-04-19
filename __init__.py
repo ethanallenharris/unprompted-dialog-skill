@@ -57,6 +57,15 @@ class UnpromptedDialog(MycroftSkill):
         self.settings['frequency'] = 0
         # Says ' Okay I will no longer take the initiative to talk'
         self.speak_dialog('stop')
+        
+        
+    #update frequency from webapp intent
+    @intent_handler('update.intent')
+    def handle_update(self, message):
+        FREQUENCY = int(message.data.get('time'))
+        
+    
+    
             
         
 
