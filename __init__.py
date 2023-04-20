@@ -5,17 +5,19 @@ import random
 
 MINUTES = 60 #seconds
 
-FREQUENCY = 60 #minutes
-
 
 class UnpromptedDialog(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
         
     def initialize(self): 
+        if 'frequencyTime' not in self.settings:
+            self.settings['frequencyTime'] = 60
+        
+        
         self.settings['dialogOptions'] = ['unprompted.generic', 'unpromted.didyouknow', 'unpromted.affirmation', 'unprompted.relationship', 'unprompted.selfimprovement', 'unprompted.spiritual']
         # Creates repeating event to talk unpromted  
-        self.schedule_repeating_event(self.__speak, datetime.now(), FREQUENCY * MINUTES, name='unprompted')
+        self.schedule_repeating_event(self.__speak, datetime.now(), self.settings['frequencyTime'] * MINUTES, name='unprompted')
         # If frequency list doesn't exist yet instantiate it
         if 'frequency' not in self.settings:
             self.settings['frequency'] = 10
@@ -62,7 +64,7 @@ class UnpromptedDialog(MycroftSkill):
     #update frequency from webapp intent
     @intent_handler('update.intent')
     def handle_update(self, message):
-        FREQUENCY = int(message.data.get('time'))
+        self.settings['frequencyTime'] = int(message.data.get('time'))
         
     
     
