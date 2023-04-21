@@ -15,12 +15,12 @@ class UnpromptedDialog(MycroftSkill):
             self.settings['frequencyTime'] = 30
         
         
-        self.settings['dialogOptions'] = ['unprompted.generic', 'unpromted.didyouknow', 'unpromted.affirmation', 'unprompted.relationship', 'unprompted.selfimprovement', 'unprompted.spiritual', 'unprompted.short']
+        self.settings['dialogOptions'] = ['unprompted.generic', 'unpromted.didyouknow', 'unprompted.relationship', 'unprompted.selfimprovement', 'unprompted.spiritual', 'unprompted.short']
         # Creates repeating event to talk unpromted  
         self.schedule_repeating_event(self.__speakUnpromted, datetime.now(), self.settings['frequencyTime'] * MINUTES, name='unprompted')
         # If frequency list doesn't exist yet instantiate it
         if 'frequency' not in self.settings:
-            self.settings['frequency'] = 10
+            self.settings['frequency'] = 6
             
     def __speakUnpromted(self, message):
         current_time = datetime.now().time()
