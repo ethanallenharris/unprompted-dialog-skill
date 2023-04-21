@@ -12,7 +12,7 @@ class UnpromptedDialog(MycroftSkill):
         
     def initialize(self): 
         if 'frequencyTime' not in self.settings:
-            self.settings['frequencyTime'] = 60
+            self.settings['frequencyTime'] = 300
         
         
         self.settings['dialogOptions'] = ['unprompted.generic', 'unpromted.didyouknow', 'unpromted.affirmation', 'unprompted.relationship', 'unprompted.selfimprovement', 'unprompted.spiritual']
